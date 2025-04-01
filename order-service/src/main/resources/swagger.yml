@@ -31,36 +31,48 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    description: "Order's id"
-                    type: integer
-                  status:
-                    description: "Order's status (EXECUTED, CANCELED or IN_PROGRESS)"
-                    type: string
-                  socialId:
-                    description: "Customer's id"
-                    type: string
+                $ref: "#/components/schemas/OrderResponse"
 
         422:
           description: "Order not found"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Order not found"
+                $ref: "#/components/schemas/ErrorResponse"
 
         400:
           description: "A required parameter is missing or invalid"
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Invalid parameters"
+                $ref: "#/components/schemas/BadRequestResponse"
+
+components:
+  schemas:
+
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          description: "Order's id"
+          type: integer
+        status:
+          description: "Order's status (EXECUTED, CANCELED or IN_PROGRESS)"
+          type: string
+        socialId:
+          description: "Customer's id"
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Order not found"
+
+    BadRequestResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Invalid parameters"

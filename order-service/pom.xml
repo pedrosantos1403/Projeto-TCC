@@ -176,6 +176,7 @@
               <modelPackage>com.pedro.tcc.Model</modelPackage>
               <configOptions>
                 <interfaceOnly>true</interfaceOnly>
+                <useReactive>false</useReactive>
               </configOptions>
             </configuration>
           </execution>
