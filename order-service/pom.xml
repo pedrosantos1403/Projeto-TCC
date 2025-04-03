@@ -2,25 +2,32 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.pedro.tcc</groupId>
-  <artifactId>order-service</artifactId>
+  <groupId>example.micronaut</groupId>
+  <artifactId>default</artifactId>
   <version>0.1</version>
   <packaging>${packaging}</packaging>
 
   <parent>
     <groupId>io.micronaut.platform</groupId>
     <artifactId>micronaut-parent</artifactId>
-    <version>4.7.6</version>
+    <version>4.8.0</version>
   </parent>
+
   <properties>
     <packaging>jar</packaging>
     <jdk.version>17</jdk.version>
     <release.version>17</release.version>
     <micronaut.version>4.7.6</micronaut.version>
-    <micronaut.runtime>netty</micronaut.runtime>
     <micronaut.aot.enabled>false</micronaut.aot.enabled>
-    <micronaut.aot.packageName>com.pedro.tcc.aot.generated</micronaut.aot.packageName>
-    <exec.mainClass>com.pedro.tcc.Application</exec.mainClass>
+    <micronaut.aot.packageName>example.micronaut.aot.generated</micronaut.aot.packageName>
+    <micronaut.runtime>netty</micronaut.runtime>
+    <micronaut.openapi.api.package.name>com.pedro.tcc.Controller</micronaut.openapi.api.package.name>
+    <micronaut.openapi.generate.server>true</micronaut.openapi.generate.server>
+    <micronaut.openapi.model.package.name>com.pedro.tcc.Model</micronaut.openapi.model.package.name>
+    <micronaut.openapi.definition>src/main/resources/swagger.yml</micronaut.openapi.definition>
+    <micronaut.openapi.use.reactive>false</micronaut.openapi.use.reactive>
+    <micronaut.openapi.always.use.generate.http.response>true</micronaut.openapi.always.use.generate.http.response>
+    <micronaut.openapi.use.bean.validation>false</micronaut.openapi.use.bean.validation>
   </properties>
 
   <repositories>
@@ -31,77 +38,84 @@
   </repositories>
 
   <dependencies>
-
+    <dependency>
+      <groupId>io.micrometer</groupId>
+      <artifactId>context-propagation</artifactId>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-http-server-netty</artifactId>
       <scope>compile</scope>
     </dependency>
-
+    <dependency>
+      <groupId>io.micronaut.flyway</groupId>
+      <artifactId>micronaut-flyway</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.reactor</groupId>
+      <artifactId>micronaut-reactor</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.micronaut.security</groupId>
+      <artifactId>micronaut-security</artifactId>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>io.micronaut.serde</groupId>
       <artifactId>micronaut-serde-jackson</artifactId>
       <scope>compile</scope>
     </dependency>
-
+    <dependency>
+      <groupId>io.micronaut.validation</groupId>
+      <artifactId>micronaut-validation</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.swagger.core.v3</groupId>
+      <artifactId>swagger-annotations</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <scope>runtime</scope>
     </dependency>
-
     <dependency>
-      <groupId>io.micronaut.openapi</groupId>
-      <artifactId>micronaut-openapi-annotations</artifactId>
+      <groupId>io.micronaut.testresources</groupId>
+      <artifactId>micronaut-test-resources-client</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <dependency>
-      <groupId>io.swagger.codegen.v3</groupId>
-      <artifactId>swagger-codegen-maven-plugin</artifactId>
-      <version>3.0.61</version>
-    </dependency>
-
     <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-http-client</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>io.micronaut.test</groupId>
       <artifactId>micronaut-test-junit5</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
-
-    <dependency>
-      <groupId>io.reactivex.rxjava3</groupId>
-      <artifactId>rxjava</artifactId>
-      <version>3.1.10</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.micronaut</groupId>
-      <artifactId>micronaut-validation</artifactId>
-      <version>3.10.4</version>
-    </dependency>
-
   </dependencies>
   <build>
     <plugins>
-
       <plugin>
         <groupId>io.micronaut.maven</groupId>
         <artifactId>micronaut-maven-plugin</artifactId>
@@ -109,12 +123,10 @@
           <configFile>aot-${packaging}.properties</configFile>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -122,16 +134,37 @@
           <!-- Uncomment to enable incremental compilation -->
           <!-- <useIncrementalCompilation>false</useIncrementalCompilation> -->
 
-          <annotationProcessorPaths combine.children="append">
+          <annotationProcessorPaths combine.self="override">
+            <path>
+              <groupId>io.micronaut</groupId>
+              <artifactId>micronaut-inject-java</artifactId>
+              <version>${micronaut.core.version}</version>
+            </path>
+            <path>
+              <groupId>io.micronaut.data</groupId>
+              <artifactId>micronaut-data-processor</artifactId>
+              <version>${micronaut.data.version}</version>
+              <exclusions>
+                <exclusion>
+                  <groupId>io.micronaut</groupId>
+                  <artifactId>micronaut-inject</artifactId>
+                </exclusion>
+              </exclusions>
+            </path>
+            <path>
+              <groupId>io.micronaut</groupId>
+              <artifactId>micronaut-graal</artifactId>
+              <version>${micronaut.core.version}</version>
+            </path>
             <path>
               <groupId>io.micronaut</groupId>
               <artifactId>micronaut-http-validation</artifactId>
               <version>${micronaut.core.version}</version>
             </path>
             <path>
-              <groupId>io.micronaut.openapi</groupId>
-              <artifactId>micronaut-openapi</artifactId>
-              <version>${micronaut.openapi.version}</version>
+              <groupId>io.micronaut.security</groupId>
+              <artifactId>micronaut-security-annotations</artifactId>
+              <version>${micronaut.security.version}</version>
               <exclusions>
                 <exclusion>
                   <groupId>io.micronaut</groupId>
@@ -150,40 +183,24 @@
                 </exclusion>
               </exclusions>
             </path>
+            <path>
+              <groupId>io.micronaut.validation</groupId>
+              <artifactId>micronaut-validation-processor</artifactId>
+              <version>${micronaut.validation.version}</version>
+              <exclusions>
+                <exclusion>
+                  <groupId>io.micronaut</groupId>
+                  <artifactId>micronaut-inject</artifactId>
+                </exclusion>
+              </exclusions>
+            </path>
           </annotationProcessorPaths>
           <compilerArgs>
-            <arg>-Amicronaut.processing.group=com.pedro.tcc</arg>
-            <arg>-Amicronaut.processing.module=order-service</arg>
+            <arg>-Amicronaut.processing.group=example.micronaut</arg>
+            <arg>-Amicronaut.processing.module=default</arg>
           </compilerArgs>
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>io.swagger.codegen.v3</groupId>
-        <artifactId>swagger-codegen-maven-plugin</artifactId>
-        <version>3.0.61</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>generate</goal>
-            </goals>
-            <configuration>
-              <inputSpec>${project.basedir}/src/main/resources/swagger.yml</inputSpec>
-              <language>micronaut</language>
-              <output>${project.build.directory}/generated-sources/</output>
-              <generateSupportingFiles>false</generateSupportingFiles>
-              <apiPackage>com.pedro.tcc.Controller</apiPackage>
-              <modelPackage>com.pedro.tcc.Model</modelPackage>
-              <configOptions>
-                <interfaceOnly>true</interfaceOnly>
-                <useReactive>false</useReactive>
-              </configOptions>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-
     </plugins>
   </build>
 
