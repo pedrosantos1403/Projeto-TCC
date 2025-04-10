@@ -1,5 +1,6 @@
 package com.pedro.tcc.Controller;
 
+import com.pedro.tcc.Model.OrderRequest;
 import com.pedro.tcc.Model.OrderResponse;
 import io.micronaut.http.HttpResponse;
 
@@ -9,6 +10,11 @@ public class OrderControllerImpl implements OrderApi {
 
     @Override
     public HttpResponse<OrderResponse> getOrder(Integer id, String socialId) {
+        return null;
+    }
+
+    @Override
+    public HttpResponse<Void> createOrder(OrderRequest orderRequest) {
         return null;
     }
 

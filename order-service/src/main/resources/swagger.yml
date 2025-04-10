@@ -3,12 +3,15 @@ info:
   title: Order API
   version: 1.0.0
   description: "Order API to register a customer order for a specific product"
+
 tags:
   - name: "Order"
+
 paths:
+
   /order/{id}:
     get:
-      summary: Get a specific order based on the order's id
+      summary: Consult a specific order
       tags:
         - "Order"
       operationId: getOrder
@@ -47,13 +50,70 @@ paths:
               schema:
                 $ref: "#/components/schemas/BadRequestResponse"
 
+  /order:
+    post:
+      summary: Create a new order
+      tags:
+        - "Order"
+      operationId: createOrder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequest"
+      responses:
+        201:
+          description: "Order created successfully"
+
+        422:
+          description: "Could not create order"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+        400:
+          description: "Invalid request body"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestResponse"
+
+
 components:
   schemas:
+
+    OrderRequest:
+      type: object
+      required:
+        - socialId
+        - amount
+        - payerWalletId
+        - receiverWalletId
+      properties:
+        socialId:
+          type: string
+          description: "Customer's social id"
+          example: "12345678900"
+        amount:
+          type: number
+          format: double
+          description: "Amount to be transferred"
+          example: 250.00
+        payerWalletId:
+          type: string
+          description: "ID of the wallet to be debited"
+          example: "wallet-abc"
+        receiverWalletId:
+          type: string
+          description: "ID of the wallet to be credited"
+          example: "wallet-def"
 
     OrderResponse:
       type: object
       properties:
-        id:
+        orderId:
           description: "Order's id"
           type: integer
         status:
@@ -68,7 +128,7 @@ components:
       properties:
         error:
           type: string
-          example: "Order not found"
+          example: "Order not found | Could not create order"
 
     BadRequestResponse:
       type: object
